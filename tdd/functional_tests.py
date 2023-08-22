@@ -62,7 +62,7 @@ class NewVisitorTest(unittest.TestCase):
         # the site made unique URL-address for her - a short text with
         # explanations was shown
 
-        self.fail('Finish off the test')
+        self.fail('Finish the test')
         # Satisfied, she goes bach to sleep
 
 if __name__ == "__main__":
