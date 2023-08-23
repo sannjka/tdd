@@ -87,13 +87,13 @@ class NewVisitorTest(LiveServerTestCase):
         # list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element(By.TAG_NAME, 'body').text
-        self.assertIn('Buy peacock feathers', page_text)
+        self.assertNotIn('Buy peacock feathers', page_text)
 
         # Francis starts a new list by entering a new item.
         # He is less interesting than Edith...
         inputbox = self.browser.find_element(By.ID, 'id_new_item')
         inputbox.send_keys('Buy milk')
-        inputbox.send_keyx(Keys.ENTER)
+        inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('Buy milk')
 
         # Francis gets his own unique URL
