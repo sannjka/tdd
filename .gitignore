@@ -18,3 +18,4 @@ pictures
 *.jpg
 *.jpeg
 *.png
+/tdd/static
