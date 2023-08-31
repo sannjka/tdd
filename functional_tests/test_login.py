@@ -62,14 +62,15 @@ class LoginTest(FunctionalTest):
 
         email_id = None
         start = time.time()
-        inbox = poplib.POP3_SSL('pop.gmail.com')
         try:
-            inbox.user(test_email)
-            inbox.pass_(os.environ['TEST_PASSWORD'])
             while time.time() - start < 60:
                 # get 10 newest messages
+                inbox = poplib.POP3_SSL('pop.gmail.com')
+                inbox.user(test_email)
+                inbox.pass_(os.environ['TEST_PASSWORD'])
                 count, _ = inbox.stat()
                 for i in reversed(range(max(1, count - 10), count + 1)):
+                    print('getting msg')
                     _, lines, __ = inbox.retr(i)
                     lines = [l.decode('utf8') for l in lines]
                     if f'Subject: {subject}' in lines:
@@ -77,7 +78,8 @@ class LoginTest(FunctionalTest):
                         body = '\n'.join(lines)
                         return body
                 time.sleep(5)
+                inbox.quit()
+                if email_id:
+                    inbox.dele(email_id) # does not delete gmail !?
         finally:
-            if email_id:
-                inbox.dele(email_id)
             inbox.quit()
