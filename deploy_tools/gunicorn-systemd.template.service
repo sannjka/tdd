@@ -4,9 +4,13 @@ Description=Gunicorn server for SITENAME
 [Service]
 Restart=on-failure
 User=sannjka
+Environment=EMAIL_ADDRESS=EMAILADDRESS
+Environment=EMAIL_PASSWORD=SEKRIT
 WorkingDirectory=/home/sannjka/sites/SITENAME
 ExecStart=/home/sannjka/sites/SITENAME/.venv/bin/gunicorn \
 --bind unix:/tmp/SITENAME.socket \
+--access-logfile ./access.log \
+--error-logfile ./error.log \
 superlists.wsgi:application
 [Install]
 WantedBy=multi-user.target
