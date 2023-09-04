@@ -20,3 +20,4 @@ pictures
 *.png
 static
 *.swo
+functional_tests/screendumps
