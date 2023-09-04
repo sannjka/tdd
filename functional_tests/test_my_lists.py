@@ -46,9 +46,9 @@ class MyListsTest(FunctionalTest):
         # She sees that her list is in there, named according to its
         # first list item
         self.wait_for(lambda: self.browser.find_element(
-            By.LINK_TEXT, 'Reticalate splines'
+            By.LINK_TEXT, 'Reticulate splines'
         ))
-        self.browers.find_element(By.LINK_TEXT, 'Reticulate splines').click()
+        self.browser.find_element(By.LINK_TEXT, 'Reticulate splines').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )
@@ -59,10 +59,11 @@ class MyListsTest(FunctionalTest):
         second_list_url = self.browser.current_url
 
         # Under "My lists" her new list appears
+        self.browser.find_element(By.LINK_TEXT, 'My lists').click()
         self.wait_for(lambda: self.browser.find_element(
             By.LINK_TEXT, 'Click cows'
         ))
-        self.browers.find_element(By.LINK_TEXT, 'Click cows').click()
+        self.browser.find_element(By.LINK_TEXT, 'Click cows').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)
         )
@@ -70,7 +71,7 @@ class MyListsTest(FunctionalTest):
         # She logs out. "My lists option" disappears
         self.browser.find_element(By.LINK_TEXT, 'Log out').click()
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_element(By.LINK_TEXT, 'My lists'),
+            self.browser.find_elements(By.LINK_TEXT, 'My lists'),
             []
         ))
 
