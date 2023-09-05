@@ -1,12 +1,15 @@
 import os
 from datetime import datetime
+import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.conf import settings
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
-import time
 from .server_tools import reset_database
+from .management.commands.create_session import \
+    create_pre_authenticated_session
 
 
 MAX_WAIT = 11
@@ -34,6 +37,20 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
         super().tearDown()
 
+    def create_pre_authenticated_session(self, email):
+        if self.staging_server:
+            session_key = create_session_on_server(self.staging_server, email)
+        else:
+            session_key = create_pre_authenticated_session(email)
+        ## to set cookie we need to first visit the domain
+        ## 404 pages load the quickest!
+        self.browser.get(self.live_server_url + '/404_no_such_url/')
+        self.browser.add_cookie(dict(
+            name=settings.SESSION_COOKIE_NAME,
+            value=session_key,
+            path='/',
+        ))
+
     def _test_has_failed(self):
         return any(error for (method, error) in self._outcome.errors)
 
@@ -43,7 +60,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.get_screenshot_as_file(filename)
 
     def dump_html(self):
-        filename = self._get_filename() + '.png'
+        filename = self._get_filename() + '.html'
         print('dumping pate HTML to', filename)
         with open(filename, 'w') as f:
             f.write(self.browser.page_source)
