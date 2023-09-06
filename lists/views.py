@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 from lists.models import Item, List
 from lists.forms import ItemForm, ExistingListItemForm, NewListForm
 
@@ -23,12 +23,20 @@ def view_list(request, list_id):
             return redirect(list_)
     return render(request, 'list.html', {'list': list_, 'form': form})
 
-def new_list(request):
+def new_list(request): # not used
     form = NewListForm(data=request.POST)
     if form.is_valid():
         list_ = form.save(owner=request.user)
         return redirect(list_)
     return render(request, 'home.html', {'form': form})
+
+class NewListView(CreateView):
+    form_class = NewListForm
+    template_name = 'home.html'
+
+    def form_valid(self, form):
+        list_ = form.save(owner=self.request.user)
+        return redirect(list_)
 
 def my_lists(request, email):
     owner = User.objects.get(email=email)
