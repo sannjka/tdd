@@ -2,14 +2,16 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import FormView
 from lists.models import Item, List
 from lists.forms import ItemForm, ExistingListItemForm, NewListForm
 
 User = get_user_model()
 
 
-def home_page(request):
-    return render(request, 'home.html', {'form': ItemForm()})
+class HomePageView(FormView):
+    template_name = 'home.html'
+    form_class = ItemForm
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)

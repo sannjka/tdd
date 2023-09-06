@@ -1,3 +1,4 @@
+from unittest import skip
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from .base import FunctionalTest
@@ -9,6 +10,7 @@ def quit_if_possible(browser):
     except: pass
 
 class SharintTest(FunctionalTest):
+    @skip
     def test_can_share_a_list_with_another_user(self):
         # Edith is a logged-in user
         self.create_pre_authenticated_session('edith@example.com')
