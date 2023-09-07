@@ -291,9 +291,6 @@
   // Support: SpiderMonkey (mozjs 68+)
   // The console object has a log method, but no warn method.
 
-  var Logger = {
-    warn: console$1 ? Function.prototype.bind.call(console$1.warn || console$1.log, console$1) : function () {}
-  };
 
   var toString = Object.prototype.toString;
   var hasOwn$1 = Object.prototype.hasOwnProperty;
